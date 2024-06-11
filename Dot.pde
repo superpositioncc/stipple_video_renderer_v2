@@ -20,6 +20,8 @@ class Dot {
 		color pixel = parent.map.get((int) this.x, (int) this.y);
 		this.intensity = brightness(pixel) / 255;
 
+		this.intensity = 1f - this.intensity;
+
 		float dx = 0;
 		float dy = 0;
 
