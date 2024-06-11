@@ -2,8 +2,10 @@ public class Dots {
 	ArrayList<Dot> dots;
 	PImage map;
 	PImage[] images;
+	PGraphics ctx;
 
-	Dots(PApplet sketch, float step, PImage[] images) {
+	Dots(PApplet sketch, PGraphics context, float step, PImage[] images) {
+		this.ctx = context;
 		dots = new ArrayList<Dot>();
 
 		this.map = new PImage(width, height);
@@ -45,7 +47,7 @@ public class Dots {
 
 	void display() {
 		for (Dot dot: dots) {
-			dot.display();
+			dot.display(ctx);
 		}
 	}
 }

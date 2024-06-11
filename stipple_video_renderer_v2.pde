@@ -12,10 +12,11 @@ Dots dots;
 
 Movie input;
 
-boolean whiteOnBlack = true;
 String output;
 
 float movieTime = 0;
+
+PGraphics context;
 
 void setup() {
 	size(1024, 1280);
@@ -26,7 +27,7 @@ void setup() {
 	ArrayList<String> paths = new ArrayList<String>();
 
 	for (String path : allPaths) {
-		if (path.endsWith(".png")) {
+		if (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg")){
 			paths.add(path);
 		}
 	}
@@ -37,7 +38,7 @@ void setup() {
 		images[i] = loadImage(paths.get(i));
 	}
 
-	output = dataPath("output/frames/frame-#####.png");
+	output = dataPath("output/frames/frame-");
 
 	String[] inputPaths = listPaths(dataPath("map"));
 	String inputPath = inputPaths[0];
@@ -54,27 +55,33 @@ void setup() {
 
 	surface.setSize(input.width, input.height);
 
-	dots = new Dots(this, step, images);
+	context = createGraphics(input.width, input.height);
+	dots = new Dots(this, context, step, images);
 }
 
 void draw() {
 	input.jump(movieTime);
 	input.read();
 
-	if (whiteOnBlack) background(0);
-	else background(255);
+	background(0);
+	
+	context.beginDraw();
+	context.clear();
 
 	if (input != null)
 		dots.setImage(input);
 
 	dots.draw();
+	context.endDraw();
 
 	surface.setTitle(round(frameRate) + " fps --- " + round((float) frameCount / 555 * 100) + "% --- frame " + frameCount);
 
-	// if (frameCount > 5) {
-		movieTime += 1f / 25;
-		saveFrame(output);
-	// }
+	movieTime += 1f / 25;
+
+	image(context, 0, 0);
+
+	context.save(output + nf(frameCount, 4) + ".png");
+	// saveFrame(output);
 
 	// Exit the program when the movie is over
 	if (movieTime >= input.duration()) {

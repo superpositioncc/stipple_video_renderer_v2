@@ -20,8 +20,6 @@ class Dot {
 		color pixel = parent.map.get((int) this.x, (int) this.y);
 		this.intensity = brightness(pixel) / 255;
 
-		if (whiteOnBlack) this.intensity = 1f - this.intensity;
-
 		float dx = 0;
 		float dy = 0;
 
@@ -51,23 +49,16 @@ class Dot {
 		this.radius = (1f - this.intensity) * (maxSize - minSize) + minSize;
 	}
 
-	void display() {
-		// if (whiteOnBlack) fill(255);
-		// else fill(0);
-
-		// noStroke();
-
-		// ellipse(this.x, this.y, this.radius * this.scaling, this.radius * this.scaling);
-
-		imageMode(CENTER);
-		pushMatrix();
-		translate(this.x, this.y);
+	void display(PGraphics ctx) {
+		ctx.imageMode(CENTER);
+		ctx.pushMatrix();
+		ctx.translate(this.x, this.y);
 
 		float aspect = (float) this.image.width / this.image.height;
 		float w = this.radius * this.scaling;
 		float h = this.radius * this.scaling / aspect;
 
-		image(this.image, -w / 2, -h / 2, w, h);
-		popMatrix();
+		ctx.image(this.image, 0, 0, w, h);
+		ctx.popMatrix();
 	}
 }
